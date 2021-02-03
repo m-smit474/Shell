@@ -1,12 +1,9 @@
-default: prod cons
+default: main
 
-all: clean prod cons
+all: clean main
 
-prod: producer.c shared.h
-	gcc producer.c -o prod -lrt
-
-cons: consumer.c shared.h
-	gcc consumer.c -o cons -lrt
+main: main.c
+	gcc main.c -o main 
 
 clean:
-	rm -f prod cons *~
+	rm -f main *~
