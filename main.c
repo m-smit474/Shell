@@ -5,10 +5,10 @@ int main( ) {
 
     char str[100];
 
-    printf( "Enter a value :");
-    scanf( "%s",str );
+    printf( "mySH$ ");       /* Command line prompt */
+    scanf( "%s",str );       /* Read in command */
     
-    printf( "You entered: ");
+    printf( "You entered: "); /* Echo command */
     puts( str );
 
     return 0;
