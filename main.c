@@ -16,9 +16,7 @@ int main()
     }
 
     exit(0);
-=======
 
-    prompt();
     
     return 0;
 }
