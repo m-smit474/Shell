@@ -6,18 +6,12 @@
 
 #include "utilities.h"
 
-#define WRITE 1
-#define READ 0
-#define BUFF_LEN 256
 
-char command[BUFF_LEN];
 const char *prompt_line = "mySH$ ";
 int write_bytes, read_bytes;
 
-
-void read_write()
+void read_write(char command[BUFF_LEN])
 {
-
    
     write_bytes = write(WRITE, prompt_line, 6); /*prints out shell prompt*/
 
@@ -31,6 +25,8 @@ void read_write()
     }
 
 }
+
+//create strcat func here
 
 int compare_strings(const char *string1, const char *string2)
 {
