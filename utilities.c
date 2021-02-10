@@ -14,27 +14,11 @@ char command[BUFF_LEN];
 const char *prompt_line = "mySH$ ";
 int write_bytes, read_bytes;
 
-void prompt()
-{
 
-    read_write();
-
-    /*asks the user to enter commands, executes till user enters 'exit'*/
-    while(compare_strings(command, "exit\n") != 0) 
-    {
-	choice(command);
-	read_write();
-    }
-    
-    exit(0);
-
-}
-
-
-    
 void read_write()
 {
 
+   
     write_bytes = write(WRITE, prompt_line, 6); /*prints out shell prompt*/
 
     read_bytes = read(READ, command, BUFF_LEN); /*reads command from user*/
