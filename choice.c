@@ -7,7 +7,7 @@
 void execute(Choice choice)
 {
     char *path = "/usr/bin/";
-
+//this is a comment
     strcat(path,choice.command);
     
     char *const newargv[] = { path, NULL };

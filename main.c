@@ -5,7 +5,7 @@
 
 int main()
 {
-
+//this is a comment
     prompt();
     
     return 0;
