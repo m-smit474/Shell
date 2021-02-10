@@ -5,6 +5,7 @@
 
 int main()
 {
+<<<<<<< HEAD
 
     read_write();
 
@@ -15,6 +16,10 @@ int main()
     }
 
     exit(0);
+=======
+//this is a comment
+    prompt();
+>>>>>>> 673d2381e46704714e701597f159d46a1b0e6d16
     
     return 0;
 }
