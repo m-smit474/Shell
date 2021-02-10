@@ -1,5 +1,5 @@
-#ifndef CHOICE_FILE
-#define CHOICE_FILE
+#ifndef CHOICE_H
+#define CHOICE_H
 
 typedef struct
 {
