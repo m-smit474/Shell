@@ -65,6 +65,7 @@ Choice parsing(char userInput[]){
 		i++;
 	    }
 	    parsnip.flags[j] = ' ';
+	    j++;
 	    printf("Parsnip.flag = %s\n",parsnip.flags);
 
 

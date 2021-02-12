@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
+#include "choice.h"
+
+void execute(Choice choice)
+{
+    char *path = "/usr/bin/";
+    //char *command = choice.command;
+
+    strcat(path,choice.command);
+    
+    char *const newargv[] = { path, NULL };
+    char *const newenvp[] = { NULL };
+
+}
