@@ -9,20 +9,22 @@
 
 void execute(Choice choice)
 {
-    char *fullCommand;
+    char *const fullCommand[] = {choice.command, choice.flags, NULL};
+    int i;
+
     
-    strcat(fullCommand, choice.command); // might need a space
-    strcat(fullCommand, choice.flags);
-    
-    char *const newargv[] = { choice.command, choice.flags, NULL };
+//    char *const newargv[] = { choice.command, NULL };
+    char *const newargv[] = {"bin/ls", NULL };
     char *const newenvp[] = { NULL };
+    
+//    strcat(fullCommand, choice.command); // might need a space
+//    strcat(fullCommand, choice.flags);
 
-    printf("Im about to become: %s\n", choice.command);
-
-    if(!execve( choice.command, newargv, newenvp))
+    if(!execve(fullCommand[0], fullCommand, newenvp))
     {
 	// Failed to execute
 	printf("FAILED\n");
+	_exit(1);
     }
 
     // Does not reach
