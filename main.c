@@ -15,7 +15,8 @@ int main()
     
     while(compare_strings(command, "exit\n") != 0)
     {
-	choice(command); /*delete this with new func*/
+	//choice(command); /*delete this with new func*/
+	execute(process);
 	read_write(command);
 	//process the user input
 	process = parsing(command);

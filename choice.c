@@ -1,20 +1,28 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h> // Need to remove at some point
+#include <sys/types.h>
+#include <sys/wait.h>
+
 #include"utilities.h"
 #include "choice.h"
 
 void execute(Choice choice)
 {
-    char *path = "/usr/bin/";
-    strcat(path,choice.command);
+    char *fullCommand;
     
-    char *const newargv[] = { path, NULL };
+    strcat(fullCommand, choice.command); // might need a space
+    strcat(fullCommand, choice.flags);
+    
+    char *const newargv[] = { choice.command, choice.flags, NULL };
     char *const newenvp[] = { NULL };
 
-    if(!execve( path, newargv, newenvp))
+    printf("Im about to become: %s\n", choice.command);
+
+    if(!execve( choice.command, newargv, newenvp))
     {
 	// Failed to execute
+	printf("FAILED\n");
     }
 
     // Does not reach
