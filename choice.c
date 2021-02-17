@@ -12,13 +12,14 @@ void execute(Choice choice)
     int i;
     char fullCommand[BUFF_LEN];
 
-    strcat(fullCommand, choice.command); // add command to string
+    strcpy(fullCommand, choice.command); // add command to string
 
+    /*
     for (i = 0; i < choice.num_flags; i++) // add flags to string
     {
 	strcat(fullCommand, choice.flags[i]);
     }
-
+    */
     
 
     char *const newargv[] = {fullCommand, NULL };
