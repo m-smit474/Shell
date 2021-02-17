@@ -9,7 +9,7 @@
 
 void execute(Choice choice)
 {
-    char *const fullCommand[] = {choice.command, choice.flags, NULL};
+//    char *const fullCommand[] = {choice.command, choice.flags, NULL};
     int i;
 
     
@@ -20,32 +20,35 @@ void execute(Choice choice)
 //    strcat(fullCommand, choice.command); // might need a space
 //    strcat(fullCommand, choice.flags);
 
+    /*
     if(!execve(fullCommand[0], fullCommand, newenvp))
     {
 	// Failed to execute
 	printf("FAILED\n");
 	_exit(1);
     }
-
+    */
     // Does not reach
 }
 
 Choice parsing(char userInput[]){
     int i;
     int j;
+    int k;
     Choice parsnip;
 
-
+    parsnip.num_flags = 0;
+    k = 0;
+    
     for(i=0; i< BUFF_LEN && userInput[i] != '\0' ; i++)
     {
     
 	while(userInput[i] == ' ')
 	    i++;
-		
+
 	if(userInput[i] == '/')
 	{ 
 
-	   
 	    j=0;
 	    while(userInput[i] != '\0' && userInput[i] != ' ')
 	    {
@@ -55,11 +58,11 @@ Choice parsing(char userInput[]){
 		i++;
 
 	    }
+	    
 	    printf("Parsnip.command = %s\n",parsnip.command);
 
 	    parsnip.command[j] = '\0';
 	    
-	    j=0;
 	
 	}
 
@@ -68,16 +71,19 @@ Choice parsing(char userInput[]){
 	if(userInput[i] == '-')
 	{
 	    
+	    j=0;
 	    while(userInput[i] != '\0' && userInput[i] != ' ')
 	    {
-		parsnip.flags[j] = userInput[i];
+		parsnip.flags[k][j] = userInput[i]; 
 		j++;
 		i++;
 	    }
-	    parsnip.flags[j] = ' ';
-	    j++;
-	    printf("Parsnip.flag = %s\n",parsnip.flags);
+	    parsnip.num_flags++;
+	    k++;
 
+	    printf("Parsnip.flag = %s\n",parsnip.flags[k]);
+//	    printf("Parsnip.flag j = %s\n",parsnip.flags[j]);
+	    
 
 	}
 	    

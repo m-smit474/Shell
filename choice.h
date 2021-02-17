@@ -4,7 +4,9 @@
 typedef struct
 {
     char command[256];          /* The inputed command that needs execution */
-    char flags[50];         /* 50 chars */
+    char flags[10][50];         /* 10 flags, 50 chars */
+    int num_flags;
+
 } Choice;
 
 void execute(Choice choice);
