@@ -56,7 +56,7 @@ Choice parsing(char userInput[]){
 	{ 
 
 	    j=0;
-	    while(userInput[i] != '\0' && userInput[i] != ' ')
+	    while(userInput[i] != '\n' && userInput[i] != ' ')
 	    {
 	 
 		parsnip.command[j] = userInput[i];
@@ -74,23 +74,24 @@ Choice parsing(char userInput[]){
 
 //	printf("WE MADE IT HERE\n");
 	
-	if(userInput[i] == '-')
+	else
 	{
 	    
 	    j=0;
-	    while(userInput[i] != '\0' && userInput[i] != ' ')
+	    while(userInput[i] != '\n' && userInput[i] != ' ')
 	    {
 		parsnip.flags[k][j] = userInput[i]; 
+		printf("Parsnip.flag = %c",parsnip.flags[k][j]);
+		printf("\n");
 		j++;
 		i++;
-	    }
-	    parsnip.flags[k][j] = '\0';
-	    
+	    }	  
+		  
 	    parsnip.num_flags++;
 	    k++;
 
 	    
-	    printf("Parsnip.flag = %s\n",parsnip.flags[k]);
+//	    printf("Parsnip.flag = %c\n",parsnip.flags[k][j]);
 //	    printf("Parsnip.flag j = %s\n",parsnip.flags[j]);
 	    
 

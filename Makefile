@@ -13,3 +13,4 @@ choice: choice.c choice.h
 
 clean:
 	rm -f main *~
+
