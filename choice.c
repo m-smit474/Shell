@@ -9,8 +9,6 @@
 
 void execute(Choice choice)
 {
-	int i;
-	char fullCommand[BUFF_LEN];
 
 	//strcpy(fullCommand, choice.command); // add command to string
 
@@ -21,10 +19,15 @@ void execute(Choice choice)
     }
     */
 
-	char *const newargv[] = {fullCommand, NULL};
+//	char *const newargv[] = {choice.command, NULL};
 	char *const newenvp[] = {NULL};
 
-	if (!execve(newargv[0], newargv, newenvp))
+//	printf("WE MADE IT HERE");
+	printf("choice.command = %s\n", *choice.command);
+	
+	execve(choice.command[0], choice.command, newenvp);
+	
+	if (!execve(choice.command[0], choice.command, newenvp))
 	{
 		// Failed to execute
 		printf("FAILED\n");
@@ -42,30 +45,42 @@ Choice parsing(char userInput[])
 	Choice parsnip;
 	char temp[BUFF_LEN + 1];
 
+	
 	for (i = 0, k = 0; i < BUFF_LEN && userInput[i] != '\0'; i++, k++)
 	{
-
-//		printf("Made it to while 1\n");
 		while (userInput[i] == ' ')
 		{
 			i++;
 		}
 
 		j = 0;
-//		printf("Made it to while 2\n");
-		while (userInput[i] != '\n' && userInput[i] != ' ')
+		
+		parsnip.command[k] = &userInput[i];
+
+		while(userInput[i] != '\n' && userInput[i] != ' ')
 		{
-//			printf("Before parsnip.command\n");
-			printf("%c", userInput[i]);
-			temp[j] = userInput[i];
-//			printf("After parsnip.command\n");
-			j++;
-			i++;
+//		    printf("userInput = %s", &userInput[i]);
+		    temp[j] = userInput[i];
+		    j++;
+		    i++;
 		}
-		printf("\n");
-		// might need to do strcpy below
-		parsnip.command[k] = temp;
+//		printf("\n");
+
+//		parsnip.command[k] = &temp[j];
+
+//		strcpy(parsnip.command[k], *temp);
+		printf("INSIDE = %s\n", *parsnip.command);
+
+		
+/*		for(j = 0; j < BUFF_LEN; j++)
+		{
+		    temp[j] = '\0';
+		}
+*/		
 	}
+
+	printf("AFTER FOR %s\n", *parsnip.command);
+
 
 	return parsnip;
 }
