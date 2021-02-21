@@ -44,7 +44,6 @@ Choice parsing(char userInput[])
 	int k;
 	Choice parsnip;
 	char temp[BUFF_LEN + 1];
-
 	
 	for (i = 0, k = 0; i < BUFF_LEN && userInput[i] != '\0'; i++, k++)
 	{
@@ -55,19 +54,18 @@ Choice parsing(char userInput[])
 
 		j = 0;
 		
-		parsnip.command[k] = &userInput[i];
+//		parsnip.command[k] = &userInput[i];
 
 		while(userInput[i] != '\n' && userInput[i] != ' ')
 		{
-//		    printf("userInput = %s", &userInput[i]);
+		    printf("userInput = %s", &userInput[i]);
 		    temp[j] = userInput[i];
 		    j++;
 		    i++;
 		}
+		
 //		printf("\n");
-
-//		parsnip.command[k] = &temp[j];
-
+		parsnip.command[k] = &temp[0];
 //		strcpy(parsnip.command[k], *temp);
 		printf("INSIDE = %s\n", *parsnip.command);
 
