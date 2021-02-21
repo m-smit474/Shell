@@ -3,23 +3,24 @@
 
 #include "utilities.h"
 #include "choice.h"
-
+#include <stdio.h>
 int main()
 {
 
-    char command[BUFF_LEN];
+    char command_line[BUFF_LEN + 1];
     Choice process;
-    read_write(command);
+    read_write(command_line);
     //process the user input
-    process = parsing(command);
-    
-    while(compare_strings(command, "exit\n") != 0)
+    process = parsing(command_line);
+  //  printf("%s\n", process.command);
+    while(compare_strings(command_line, "exit\n") != 0)
     {
 	//choice(command); /*delete this with new func*/
-	execute(process);
-	read_write(command);
+	//execute(process);
+	read_write(command_line);
 	//process the user input
-	process = parsing(command);
+    
+	process = parsing(command_line);
     }
 
     exit(0);

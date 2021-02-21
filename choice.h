@@ -3,9 +3,7 @@
 
 typedef struct
 {
-    char command[256];          /* The inputed command that needs execution */
-    char flags[10][50];         /* 10 flags, 50 chars */
-    int num_flags;
+    char *command[BUFF_LEN + 1];          /* The inputed command that needs execution */
 
 } Choice;
 
