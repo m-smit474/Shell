@@ -11,34 +11,41 @@
 void execute(Choice choice)
 {
 
-//	char *const newargv[] = {choice.command, NULL};
+
 	char *const newenvp[] = {NULL};
-	char *const newargv[] = {choice.command[0], choice.command[1],choice.command[2], NULL};
 	int i;
 	char *flags[choice.num_flags + 2]; 
+	pid_t pid;
+	int status;
 	
-//	printf("WE MADE IT HERE");
+
 	printf("choice.command = %s\n", *choice.command);
 
+
+	//extracting commands, clearing out extra spaces we did not want
 	for(i = 0; i <= choice.num_flags; i++)
 	{
 	    flags[i] = choice.command[i];
 	    printf("i = %s\n", *(choice.command + i));
-	
 	}
 
 	flags[i] = NULL;
-
-//	execve(choice.command[0], choice.command[i], newenvp);
-	
-	if (!execve(choice.command[0], flags, newenvp))
+	pid = fork();
+	if(pid == 0)
 	{
-		// Failed to execute
+//	    execve(choice.command[0], flags, newenvp);
+	    if (!execve(choice.command[0], flags, newenvp))
+	    {
 		printf("FAILED\n");
-		_exit(1);
+		//	_exit(1);
+	    }
 	}
+	
+	
 
-	// Does not reach
+	waitpid(pid, &status, 0);
+	
+	
 }
 
 Choice new_choice(Choice create)
@@ -69,7 +76,8 @@ Choice parsing(char userInput[])
 	char temp[BUFF_LEN + 1];
 
 	parsnip = new_choice(parsnip);
-	
+
+	// a known bug: does not work if user inputs a space after commands
 	for (i = 0, k = 0; i < BUFF_LEN && userInput[i] != '\0'; i++, k++)
 	{
 

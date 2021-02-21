@@ -19,7 +19,6 @@ int main()
 //    printf("MAIN PROCESS = %s\n", *process.command);
     while(compare_strings(command_line, "exit\n") != 0)
     {
-	//choice(command); /*delete this with new func*/
 	execute(process);
 	read_write(command_line);
 	//process the user input
