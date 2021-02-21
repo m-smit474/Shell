@@ -44,7 +44,7 @@ Choice parsing(char userInput[])
 
 	for (i = 0, k = 0; i < BUFF_LEN && userInput[i] != '\0'; i++, k++)
 	{
-		
+
 		printf("Made it to while 1\n");
 		while (userInput[i] == ' ')
 		{
@@ -62,14 +62,8 @@ Choice parsing(char userInput[])
 			j++;
 			i++;
 		}
+		// might need to do strcpy below
 		parsnip.command[k] = temp;
-	
-		//printf("%s\n", *parsnip.command);
-		//  printf("Parsnip.command = %s\n",parsnip.command);
-		//temp[j] = '\0';
-		//strcpy(parsnip.command[k], temp);
-		//printf("%i\n", *parsnip.command[j]++);
-		//k++;
 	}
 
 	return parsnip;
