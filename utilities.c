@@ -20,7 +20,7 @@ void read_write(char command[BUFF_LEN])
     if(read_bytes < BUFF_LEN)                   /*clears buffer */
     {
 	command[read_bytes] = '\0';
-//	printf("%s\n", command);
+//	printf("READ_WRITE COMMAND = %s\n", command);
 
     }
 

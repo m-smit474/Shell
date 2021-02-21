@@ -45,23 +45,24 @@ Choice parsing(char userInput[])
 	for (i = 0, k = 0; i < BUFF_LEN && userInput[i] != '\0'; i++, k++)
 	{
 
-		printf("Made it to while 1\n");
+//		printf("Made it to while 1\n");
 		while (userInput[i] == ' ')
 		{
 			i++;
 		}
 
 		j = 0;
-		printf("Made it to while 2\n");
+//		printf("Made it to while 2\n");
 		while (userInput[i] != '\n' && userInput[i] != ' ')
 		{
-			printf("Before parsnip.command\n");
-			printf("%c\n", userInput[i]);
+//			printf("Before parsnip.command\n");
+			printf("%c", userInput[i]);
 			temp[j] = userInput[i];
-			printf("After parsnip.command\n");
+//			printf("After parsnip.command\n");
 			j++;
 			i++;
 		}
+		printf("\n");
 		// might need to do strcpy below
 		parsnip.command[k] = temp;
 	}
