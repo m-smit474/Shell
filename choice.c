@@ -47,7 +47,12 @@ void execute(Choice choice)
 	
 	
 }
-
+/*
+new_choice
+Input: either the argument or the flag
+Output: a new spot in the array for the command/flag
+This is a helper function for the parsing function
+*/
 Choice new_choice(Choice create)
 {
 
@@ -66,6 +71,14 @@ Choice new_choice(Choice create)
 
 }
 
+/*
+Parsing
+Input: The command line that has been preprocessed by the readwrite function
+Output: An array list with the first element being the command and remaining elements being the flags
+The main for loop cycles through each character until the end of the input, 
+the key part in this function is line *(parsnip.command[k] + j) = userInput[i] 
+which sends either the command or the flag into the array.
+*/
 
 Choice parsing(char userInput[])
 {
