@@ -7,6 +7,13 @@
 
 #include "utilities.h"
 #include "choice.h"
+/*
+Execute
+Input: the broken up command input
+Output: void
+This funstion calls fork and execve and creates the children processes
+that run outside the parent.
+*/
 
 void execute(Choice choice)
 {
