@@ -4,6 +4,7 @@
 #include <string.h> // Need to remove at some point
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <stdbool.h>
 
 #include "utilities.h"
 #include "choice.h"
@@ -58,7 +59,8 @@ void execute(Choice choice)
 new_choice
 Input: either the argument or the flag
 Output: a new spot in the array for the command/flag
-This is a helper function for the parsing function
+This is a helper function for the parsing function 
+and allocates space for strings
 */
 Choice new_choice(Choice create)
 {
@@ -94,12 +96,13 @@ Choice parsing(char userInput[])
 	int k;
 	Choice parsnip;
 	char temp[BUFF_LEN + 1];
+	bool isWord;
 
 	parsnip = new_choice(parsnip);
 
-	// a known bug: does not work if user inputs a space after commands
-	for (i = 0, k = 0; i < BUFF_LEN && userInput[i] != '\0'; i++, k++)
+	for (i = 0, k = 0; i < BUFF_LEN && userInput[i] != '\0' && userInput[i] != '\n'; i++)
 	{
+		isWord = false;
 
 	    while (userInput[i] == ' ')
 	    {
@@ -110,12 +113,13 @@ Choice parsing(char userInput[])
 
 	    while(userInput[i] != '\n' && userInput[i] != ' ')
 	    {
-
+		isWord = true;
 		*(parsnip.command[k] + j) = userInput[i];
 		j++;
 		i++;
 	    }
-		
+		if(isWord)
+		k++;
 	}
 
 
