@@ -1,11 +1,3 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h> // Need to remove at some point
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <stdbool.h>
-
 #include "utilities.h"
 #include "choice.h"
 /*
@@ -48,10 +40,13 @@ void execute(Choice choice)
 		//	_exit(1);
 	    }
 	}
-	
-	
+	else{
 
-	waitpid(pid, &status, 0);
+	    if(!choice.runInBackground)
+	    {
+		waitpid(pid, &status, 0);
+	    }
+	}
 	
 	
 }
@@ -68,6 +63,7 @@ Choice new_choice(Choice create)
     int i;
 
     create.num_flags = 0;
+    create.runInBackground = false;
     
     for(i = 0; i < BUFF_LEN; i++)
     {
@@ -106,6 +102,12 @@ Choice parsing(char userInput[])
 
 	    while (userInput[i] == ' ')
 	    {
+		i++;
+	    }
+
+	    if(userInput[i] == '&')
+	    {
+		parsnip.runInBackground = true;
 		i++;
 	    }
 
