@@ -11,7 +11,7 @@
 Execute
 Input: the broken up command input
 Output: void
-This funstion calls fork and execve and creates the children processes
+This function calls fork and execve and creates the children processes
 that run outside the parent.
 */
 
