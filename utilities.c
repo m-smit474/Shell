@@ -5,6 +5,66 @@
 
 
 #include "utilities.h"
+#include "choice.h"
+
+
+/*
+Parsing
+Input: The command line that has been preprocessed by the readwrite function
+Output: An array list with the first element being the command and remaining eleme\
+nts being the flags
+The main for loop cycles through each character until the end of the input,
+the key part in this function is line *(parsnip.command[k] + j) = userInput[i]
+which sends either the command or the flag into the array.
+*/
+
+Choice parsing(char userInput[])
+{
+    int i;
+    int j;
+    int k;
+    Choice parsnip;
+    char temp[BUFF_LEN + 1];
+    bool isWord;
+
+    parsnip = new_choice(parsnip);
+
+    for (i = 0, k = 0; i < BUFF_LEN && userInput[i] != '\0' && userInput[i] !=\
+	     '\n'; i++)
+    {
+	isWord = false;
+
+	while (userInput[i] == ' ')
+	{
+	    i++;
+	}
+
+	if(userInput[i] == '&')
+	{
+	    parsnip.runInBackground = true;
+	    i++;
+	}
+
+	j = 0;
+
+	while(userInput[i] != '\n' && userInput[i] != ' ')
+	{
+	    isWord = true;
+	    *(parsnip.command[k] + j) = userInput[i];
+	    j++;
+	    i++;
+	}
+
+	if(isWord)
+	    k++;
+    }
+
+
+    parsnip.num_flags = k - 1;
+
+    return parsnip;
+}
+
 
 
 const char *prompt_line = "mySH$ ";
