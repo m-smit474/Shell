@@ -19,7 +19,7 @@
 Choice parsing(char userInput[], int *i);
 void read_write(char command[BUFF_LEN]);
 int compare_strings(const char *string1, const char *string2);
-void choice(char command[]);
+
 
 
 

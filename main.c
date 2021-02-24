@@ -11,19 +11,13 @@ int main()
     char command_line[BUFF_LEN + 1];
     Choice process;
 
-//    printf("HERE = %s\n",*process.command);
     read_write(command_line);
-//    launch();
-//    process = parsing(command_line); //process the user input
 
-//    printf("MAIN PROCESS = %s\n", *process.command);
+    //initiates the process of creating the shell and executing the command line entry. 
     while(compare_strings(command_line, "exit\n") != 0)
     {
 	launch(command_line);
-	//execute(process);
 	read_write(command_line);
-	//process the user input
-//	process = parsing(command_line);
     }
 
     exit(0);

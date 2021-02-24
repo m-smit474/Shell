@@ -4,7 +4,13 @@
 #include "choice.h"
 
 /*
-where we do pipe. 
+launch
+
+Input: the user command.
+Output: none
+
+This function executes the pipe if user inputs '|' char, else it runs the execve command 
+normally.
 
 */
 void launch(char userInput[])
@@ -70,8 +76,10 @@ void launch(char userInput[])
 
 /*
 Execute
+
 Input: the broken up command input
 Output: void
+
 This function calls fork and execve and creates the children processes
 that run outside the parent.
 */
@@ -89,7 +97,6 @@ void execute(Choice choice)
 
 	printf("choice.command = %s\n", *choice.command);
 
-
 	//extracting commands, clearing out extra spaces we did not want
 	for(i = 0; i <= choice.num_flags; i++)
 	{
@@ -103,11 +110,9 @@ void execute(Choice choice)
 
 	if(pid == 0)
 	{
-//	    execve(choice.command[0], flags, newenvp);
 	    if (!execve(choice.command[0], flags, newenvp))
 	    {
 		printf("FAILED\n");
-		//	_exit(1);
 	    }
 	}
 	else{
@@ -123,13 +128,17 @@ void execute(Choice choice)
 	
 }
 
+
 /*
 new_choice
+
 Input: either the argument or the flag
 Output: a new spot in the array for the command/flag
+
 This is a helper function for the parsing function 
 and allocates space for strings
 */
+
 Choice new_choice(Choice create)
 {
 

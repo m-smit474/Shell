@@ -35,7 +35,6 @@ Choice parsing(char userInput[], int *i)
     {
 	isWord = false;
 
-
 	while (userInput[*i] == ' ')
 	{
 	    (*i)++;
@@ -46,7 +45,6 @@ Choice parsing(char userInput[], int *i)
 	    parsnip.runInBackground = true;
 	    (*i)++;
 	}
-
 	
 	j = 0;
 
@@ -110,18 +108,6 @@ int compare_strings(const char *string1, const char *string2)
 }
 
 
-void choice(char command[])
-{
 
-    if(compare_strings(command, "ls\n") == 0)
-    {
-	printf("inside ls\n");
-    }
-    else
-    {
-	printf("invalid entry\n");
-    }
-    
-}
 
 
