@@ -1,5 +1,73 @@
+#include <signal.h>
+
 #include "utilities.h"
 #include "choice.h"
+
+/*
+where we do pipe. 
+
+*/
+void launch(char userInput[])
+{
+    
+    int *i;
+    Choice parsnip, parsnip2;
+    int pipefd[2];
+    int pid1,pid2;
+    int child_status;
+    
+    i = malloc(4);
+    
+    *i = 0;
+
+    parsnip = parsing(userInput, i);
+
+    if(parsnip.isPipe == true)
+    {
+//	printf("i inside if in launch = %d\n", *i);
+	parsnip2 = parsing(userInput, i);
+
+	if(pipe(pipefd) == -1)
+	{
+	    perror("pipe");
+	    _exit(1);
+	}
+	
+	pid1 = fork();
+	if(pid1 == 0)
+	{
+	    close(pipefd[READ_END]);
+	    dup2(pipefd[WRITE_END], 1);
+	    execute(parsnip);
+	    kill(getpid(), SIGKILL);
+	}
+	
+	close(pipefd[WRITE_END]);
+
+	pid2 = fork();
+	if(pid2 == 0)
+	{
+	    close(pipefd[WRITE_END]);
+	    dup2(pipefd[READ_END], 0);
+	    execute(parsnip2);
+	    kill(getpid(), SIGKILL);
+	}
+	
+	close(pipefd[READ_END]);
+
+	waitpid(pid1, &child_status, 0);
+	waitpid(pid2, &child_status, 0);
+	
+    }
+    
+    else
+    {
+	execute(parsnip);
+    }
+    
+}
+
+
 /*
 Execute
 Input: the broken up command input
@@ -30,7 +98,9 @@ void execute(Choice choice)
 	}
 
 	flags[i] = NULL;
+
 	pid = fork();
+
 	if(pid == 0)
 	{
 //	    execve(choice.command[0], flags, newenvp);
@@ -42,6 +112,8 @@ void execute(Choice choice)
 	}
 	else{
 
+	    //if you don't want to run in the background we wait.
+	    //wait for child to finish.
 	    if(!choice.runInBackground)
 	    {
 		waitpid(pid, &status, 0);
@@ -50,6 +122,7 @@ void execute(Choice choice)
 	
 	
 }
+
 /*
 new_choice
 Input: either the argument or the flag
@@ -64,6 +137,7 @@ Choice new_choice(Choice create)
 
     create.num_flags = 0;
     create.runInBackground = false;
+    create.isPipe = false;
     
     for(i = 0; i < BUFF_LEN; i++)
     {

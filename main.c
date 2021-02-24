@@ -12,17 +12,18 @@ int main()
     Choice process;
 
 //    printf("HERE = %s\n",*process.command);
-    
     read_write(command_line);
-    process = parsing(command_line); //process the user input
+//    launch();
+//    process = parsing(command_line); //process the user input
 
 //    printf("MAIN PROCESS = %s\n", *process.command);
     while(compare_strings(command_line, "exit\n") != 0)
     {
-	execute(process);
+	launch(command_line);
+	//execute(process);
 	read_write(command_line);
 	//process the user input
-	process = parsing(command_line);
+//	process = parsing(command_line);
     }
 
     exit(0);

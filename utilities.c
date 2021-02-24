@@ -2,12 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 //#include <string.h>
-
-
 #include "utilities.h"
 #include "choice.h"
 
-
+const char *prompt_line = "mySH$ ";
+int write_bytes, read_bytes;
 /*
 Parsing
 Input: The command line that has been preprocessed by the readwrite function
@@ -18,47 +17,56 @@ the key part in this function is line *(parsnip.command[k] + j) = userInput[i]
 which sends either the command or the flag into the array.
 */
 
-Choice parsing(char userInput[])
+Choice parsing(char userInput[], int *i)
 {
-    int i;
+//    int i;
     int j;
     int k;
     Choice parsnip;
     char temp[BUFF_LEN + 1];
     bool isWord;
 
+
     parsnip = new_choice(parsnip);
 
-    for (i = 0, k = 0; i < BUFF_LEN && userInput[i] != '\0' && userInput[i] !=\
-	     '\n'; i++)
+
+    for (k = 0; *i < BUFF_LEN && userInput[*i] != '\0' && userInput[*i] != \
+	     '\n' && userInput[*i] != '|' ; (*i)++)
     {
 	isWord = false;
 
-	while (userInput[i] == ' ')
+
+	while (userInput[*i] == ' ')
 	{
-	    i++;
+	    (*i)++;
 	}
 
-	if(userInput[i] == '&')
+	if(userInput[*i] == '&')
 	{
 	    parsnip.runInBackground = true;
-	    i++;
+	    (*i)++;
 	}
 
+	
 	j = 0;
 
-	while(userInput[i] != '\n' && userInput[i] != ' ')
+	while(userInput[*i] != '\n' && userInput[*i] != ' ')
 	{
 	    isWord = true;
-	    *(parsnip.command[k] + j) = userInput[i];
+	    *(parsnip.command[k] + j) = userInput[*i];
 	    j++;
-	    i++;
+	    (*i)++;
 	}
 
 	if(isWord)
 	    k++;
     }
 
+    if(userInput[*i] == '|')
+    {
+	parsnip.isPipe = true;
+	(*i)++;
+    }
 
     parsnip.num_flags = k - 1;
 
@@ -66,9 +74,6 @@ Choice parsing(char userInput[])
 }
 
 
-
-const char *prompt_line = "mySH$ ";
-int write_bytes, read_bytes;
 
 void read_write(char command[BUFF_LEN])
 {
