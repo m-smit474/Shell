@@ -9,8 +9,8 @@ launch
 Input: the user command.
 Output: none
 
-This function executes the pipe if user inputs '|' char, else it runs the execve command 
-normally.
+This function executes the pipe if user inputs '|' char, else 
+it runs the execve command normally.
 
 */
 void launch(char userInput[])
@@ -65,12 +65,72 @@ void launch(char userInput[])
 	waitpid(pid2, &child_status, 0);
 	
     }
-    
+    else if(parsnip.inputRedirect || parsnip.outputRedirect)
+    {
+	
+	redirect(parsnip);
+	printf("AFTER REDIRECT IN LAUNCH\n");
+//	execute(parsnip);
+	printf("AFTER REDIRECT EXECUTE\n");
+	
+    }
     else
     {
 	execute(parsnip);
     }
     
+}
+
+//comment help stackover flow.
+void redirect(Choice parsnip)
+{
+    int in_fd, out_fd;
+    int pid,pid2;
+    int child_status;
+
+    if(parsnip.inputRedirect)
+    {
+	
+	pid = fork();
+	if(pid == 0)
+	{
+	    in_fd = open(parsnip.fileName, O_RDONLY);
+	    if(in_fd < 0)
+	    {
+		perror("failed to open file\n");
+		_exit(1);
+	    }
+	    dup2(in_fd, STDIN_FILENO);
+	    close(in_fd);
+	    execute(parsnip);
+	    kill(getpid(), SIGKILL);
+	}
+
+    }
+    else // output redirect
+    {
+	pid2 = fork();
+	if(pid2 == 0)
+	{
+//	    out_fd = creat(parsnip.fileName, 0644); //create
+	    out_fd = open(parsnip.fileName, O_CREAT | O_RDWR | O_APPEND,0644); //create new output
+	    if(out_fd < 0)
+	    {
+		perror("failed to create output file.\n");
+		_exit(1);
+	    }
+	    dup2(out_fd, STDOUT_FILENO);
+	    close(out_fd);
+	    execute(parsnip);
+	    kill(getpid(), SIGKILL);
+	}
+		
+    }    
+
+    waitpid(pid, &child_status, 0);
+    waitpid(pid2, &child_status, 0);
+    
+
 }
 
 
@@ -86,15 +146,13 @@ that run outside the parent.
 
 void execute(Choice choice)
 {
-
-
+    
 	char *const newenvp[] = {NULL};
 	int i;
 	char *flags[choice.num_flags + 2]; 
 	pid_t pid;
 	int status;
 	
-
 	printf("choice.command = %s\n", *choice.command);
 
 	//extracting commands, clearing out extra spaces we did not want
@@ -107,7 +165,7 @@ void execute(Choice choice)
 	flags[i] = NULL;
 
 	pid = fork();
-
+	printf("AFTER FORK PROCRESSID = %d\n", getpid());
 	if(pid == 0)
 	{
 	    if (!execve(choice.command[0], flags, newenvp))
@@ -115,8 +173,8 @@ void execute(Choice choice)
 		printf("FAILED\n");
 	    }
 	}
-	else{
-
+	else
+	{
 	    //if you don't want to run in the background we wait.
 	    //wait for child to finish.
 	    if(!choice.runInBackground)
@@ -147,6 +205,8 @@ Choice new_choice(Choice create)
     create.num_flags = 0;
     create.runInBackground = false;
     create.isPipe = false;
+    create.inputRedirect = false;
+    create.outputRedirect = false;
     
     for(i = 0; i < BUFF_LEN; i++)
     {

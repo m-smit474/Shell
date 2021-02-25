@@ -20,8 +20,7 @@ which sends either the command or the flag into the array.
 Choice parsing(char userInput[], int *i)
 {
 //    int i;
-    int j;
-    int k;
+    int j,k,l;
     Choice parsnip;
     char temp[BUFF_LEN + 1];
     bool isWord;
@@ -31,7 +30,7 @@ Choice parsing(char userInput[], int *i)
 
 
     for (k = 0; *i < BUFF_LEN && userInput[*i] != '\0' && userInput[*i] != \
-	     '\n' && userInput[*i] != '|' ; (*i)++)
+	     '\n' && userInput[*i] != '|' && userInput[*i] != '>' && userInput[*i] != '<'; (*i)++)
     {
 	isWord = false;
 
@@ -65,7 +64,35 @@ Choice parsing(char userInput[], int *i)
 	parsnip.isPipe = true;
 	(*i)++;
     }
+    else if(userInput[*i] == '<' || userInput[*i] == '>')
+    {
 
+	if(userInput[*i] == '>') 
+	{
+	    parsnip.outputRedirect = true;
+	}
+	else
+	{
+	    parsnip.inputRedirect = true;
+	}
+	
+	(*i)++;
+	
+	while(userInput[*i] == ' ')
+	{
+	    (*i)++;
+	}
+	
+	for(l = 0; l < FILE_LEN && userInput[*i] != '\n' && userInput[*i] != ' ' ; l++, (*i)++)
+	{
+
+	    parsnip.fileName[l] = userInput[*i];
+
+	}
+	
+	printf("FILENAME = %s\n", parsnip.fileName);	
+	
+    }
     parsnip.num_flags = k - 1;
 
     return parsnip;

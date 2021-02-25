@@ -3,6 +3,7 @@
 
 #define READ_END 0
 #define WRITE_END 1
+#define FILE_LEN 40
 
 typedef struct
 {
@@ -10,10 +11,15 @@ typedef struct
     int num_flags;
     bool runInBackground;
     bool isPipe;
+    char fileName[FILE_LEN];
+    bool inputRedirect;
+    bool outputRedirect;
+    
     
 } Choice;
 
 void launch(char userInput[]);
+void redirect(Choice parsnip);
 void execute(Choice choice);
 Choice new_choice(Choice create);
 

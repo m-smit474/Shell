@@ -10,8 +10,10 @@
 #include <stdlib.h>
 #include <string.h> // Need to remove at some point
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <stdbool.h>
+#include <fcntl.h>
 
 #include "choice.h"
 
