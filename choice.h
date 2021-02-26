@@ -5,6 +5,9 @@
 #define WRITE_END 1
 #define FILE_LEN 40
 
+
+//  struct for the command
+
 typedef struct
 {
     char *command[BUFF_LEN + 1];          /* The inputed command that needs execution */

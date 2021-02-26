@@ -1,39 +1,43 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <string.h>
+
 #include "utilities.h"
 #include "choice.h"
 
 const char *prompt_line = "mySH$ ";
 int write_bytes, read_bytes;
+
 /*
-Parsing
-Input: The command line that has been preprocessed by the readwrite function
-Output: An array list with the first element being the command and remaining eleme\
-nts being the flags
-The main for loop cycles through each character until the end of the input,
-the key part in this function is line *(parsnip.command[k] + j) = userInput[i]
-which sends either the command or the flag into the array.
+ *Parsing
+ *
+ *Input: The command line that has been preprocessed by the readwrite function
+ *Output: A structure containing the whole user command line. 
+ *
+ *The main for loop cycles through each character until the end of the input,
+ *the key part in this function is line *(parsnip.command[k] + j) = userInput[i]
+ *which sends either the command or the flag into the array.
+ *
 */
 
 Choice parsing(char userInput[], int *i)
 {
-//    int i;
+
     int j,k,l;
     Choice parsnip;
     char temp[BUFF_LEN + 1];
     bool isWord;
 
-
     parsnip = new_choice(parsnip);
 
-
+    /*this loop goes through each character of the user input, and if it hits a special character
+      the loop will stop.*/
     for (k = 0; *i < BUFF_LEN && userInput[*i] != '\0' && userInput[*i] != \
 	     '\n' && userInput[*i] != '|' && userInput[*i] != '>' && userInput[*i] != '<'; (*i)++)
     {
 	isWord = false;
 
+	//ignores all whitespaces in the input. 
 	while (userInput[*i] == ' ')
 	{
 	    (*i)++;
@@ -47,12 +51,13 @@ Choice parsing(char userInput[], int *i)
 	
 	j = 0;
 
+	// this loop copies the command into the structure. 
 	while(userInput[*i] != '\n' && userInput[*i] != ' ')
 	{
 	    isWord = true;
 	    *(parsnip.command[k] + j) = userInput[*i];
 	    j++;
-	    (*i)++;
+	    (*i)++; 
 	}
 
 	if(isWord)
@@ -90,7 +95,6 @@ Choice parsing(char userInput[], int *i)
 
 	}
 	
-	printf("FILENAME = %s\n", parsnip.fileName);	
 	
     }
     parsnip.num_flags = k - 1;
@@ -98,9 +102,19 @@ Choice parsing(char userInput[], int *i)
     return parsnip;
 }
 
+/*
+ * prompt
+ *
+ * Input: character array. 
+ *
+ * Output: The command line stored in the character array.  
+ *
+ * This function outputs the prompt line 'mySH$' and reads in the 
+ * user input. Using system calls.  
+ *
+*/
 
-
-void read_write(char command[BUFF_LEN])
+void prompt(char command[BUFF_LEN])
 {
    
     write_bytes = write(WRITE, prompt_line, 6); /*prints out shell prompt*/
@@ -110,13 +124,22 @@ void read_write(char command[BUFF_LEN])
     if(read_bytes < BUFF_LEN)                   /*clears buffer */
     {
 	command[read_bytes] = '\0';
-//	printf("READ_WRITE COMMAND = %s\n", command);
 
     }
 
 }
 
-//create strcat func here
+/*
+ * compare_strings
+ *
+ *Input: The two string characters being compared. 
+ *
+ *Output: Depending if the strings match either a 0 if they match
+ * or a negative number if they do not. 
+ *
+ * Compares two strings. 
+ *
+ */
 
 int compare_strings(const char *string1, const char *string2)
 {

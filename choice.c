@@ -4,14 +4,15 @@
 #include "choice.h"
 
 /*
-launch
-
-Input: the user command.
-Output: none
-
-This function executes the pipe if user inputs '|' char, else 
-it runs the execve command normally.
-
+ *launch
+ *
+ *Input: the user command.
+ *Output: none
+ *
+ *This function handles stage piping if user inputs '|', and 
+ *redirect if user inputs '<' or '>', else it runs the execve 
+ *command normally. 
+ *
 */
 void launch(char userInput[])
 {
@@ -23,14 +24,13 @@ void launch(char userInput[])
     int child_status;
     
     i = malloc(4);
-    
     *i = 0;
-
+    
     parsnip = parsing(userInput, i);
 
+    // this handles the piping command
     if(parsnip.isPipe == true)
     {
-//	printf("i inside if in launch = %d\n", *i);
 	parsnip2 = parsing(userInput, i);
 
 	if(pipe(pipefd) == -1)
@@ -65,14 +65,10 @@ void launch(char userInput[])
 	waitpid(pid2, &child_status, 0);
 	
     }
+    //this handles I/O redirection
     else if(parsnip.inputRedirect || parsnip.outputRedirect)
     {
-	
 	redirect(parsnip);
-	printf("AFTER REDIRECT IN LAUNCH\n");
-//	execute(parsnip);
-	printf("AFTER REDIRECT EXECUTE\n");
-	
     }
     else
     {
@@ -81,7 +77,16 @@ void launch(char userInput[])
     
 }
 
-//comment help stackover flow.
+/*
+ *redirect
+ *
+ *Input: the struct for the command
+ *Output: none. 
+ *
+ * This function change how I/O is handled depending on the structure passed 
+ * in and executes the command. 
+ *
+*/
 void redirect(Choice parsnip)
 {
     int in_fd, out_fd;
@@ -112,7 +117,8 @@ void redirect(Choice parsnip)
 	pid2 = fork();
 	if(pid2 == 0)
 	{
-//	    out_fd = creat(parsnip.fileName, 0644); //create
+	    
+	    // 0644 gives write access to the file. 
 	    out_fd = open(parsnip.fileName, O_CREAT | O_RDWR | O_APPEND,0644); //create new output
 	    if(out_fd < 0)
 	    {
@@ -130,18 +136,18 @@ void redirect(Choice parsnip)
     waitpid(pid, &child_status, 0);
     waitpid(pid2, &child_status, 0);
     
-
 }
 
 
 /*
 Execute
 
-Input: the broken up command input
-Output: void
+Input: the structure for the command
+Output: none. 
 
 This function calls fork and execve and creates the children processes
-that run outside the parent.
+that run outside the parent. This runs the executable and terminantes the 
+child process. 
 */
 
 void execute(Choice choice)
@@ -152,25 +158,22 @@ void execute(Choice choice)
 	char *flags[choice.num_flags + 2]; 
 	pid_t pid;
 	int status;
-	
-	printf("choice.command = %s\n", *choice.command);
 
-	//extracting commands, clearing out extra spaces we did not want
+	//ignores uninitialized elements in the command. 
 	for(i = 0; i <= choice.num_flags; i++)
 	{
 	    flags[i] = choice.command[i];
-	    printf("i = %s\n", *(choice.command + i));
 	}
 
 	flags[i] = NULL;
 
 	pid = fork();
-	printf("AFTER FORK PROCRESSID = %d\n", getpid());
+
 	if(pid == 0)
 	{
 	    if (!execve(choice.command[0], flags, newenvp))
 	    {
-		printf("FAILED\n");
+		perror("error in execve\n");
 	    }
 	}
 	else
@@ -182,19 +185,22 @@ void execute(Choice choice)
 		waitpid(pid, &status, 0);
 	    }
 	}
-	
-	
+		
 }
 
 
 /*
+
 new_choice
 
-Input: either the argument or the flag
-Output: a new spot in the array for the command/flag
+Input: the uninitialized strucutre of the command
+Output: the initialized structure
 
 This is a helper function for the parsing function 
-and allocates space for strings
+and allocates space for the strings. 
+
+Limitation: does not free any of the allocated spaces. 
+
 */
 
 Choice new_choice(Choice create)
@@ -211,9 +217,7 @@ Choice new_choice(Choice create)
     for(i = 0; i < BUFF_LEN; i++)
     {
 	create.command[i] = malloc(20); // creates 20 max size of the string 
-	//we need to free this later
     }
-//    *(create.command[i]+1) = '\0';
 	    
     return create;  
 
